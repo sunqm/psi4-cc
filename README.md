@@ -1,4 +1,4 @@
 psi4-cc
 =======
 
-python wrapper for Psi4 CC module
+python wrapper for Psi4 Coupled Cluster module
