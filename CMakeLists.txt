@@ -10,7 +10,7 @@ message("psi4 src dir is  ${PSI4DIR}\n")
 
 set(LAPACK_LIBRARIES "-L${MKL_LIB_PATH} -I${MKLINCLUDE} -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lpthread -lmkl_avx -lm")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${LAPACK_LIBRARIES}")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O3")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O3 -fPIC")
 
 #set(CMAKE_INCLUDE_CURRENT_DIR ON)
 include_directories(
