@@ -79,10 +79,10 @@ class Solver(object):
     '''
 
     instances = 0
-    def __init__(self):
+    def __init__(self, max_memory=(1<<30)):
         self._tmpdir = tempfile.mkdtemp(prefix='tmpsi4')
         if Solver.instances == 0:
-            _psi4.set_psi4_env(self._tmpdir)
+            _psi4.set_psi4_env(self._tmpdir, max_memory=max_memory)
         Solver.instances += 1
 
         self.nmo = 0
@@ -163,7 +163,7 @@ class Solver(object):
         _psi4.prepare_dpd_ints(self.ref, self.nmo, hcore_mo, eri_mo)
 
     def energy(self, key):
-        '''Calculate energy
+        '''Calculate correlation energy
 
         Parameters
         ----------
@@ -202,6 +202,9 @@ class Solver(object):
     def read_dm(self, notation='D'):
         '''Read 1-particle and anti-symmetrized 2-particle density matrices if
         density matrices have been calculated.
+        * Hartree-Fock 1pdm and 2pdm are NOT included.
+        * J,K of Fock operator has been included in 2pdm
+        * Only get alpha spin rdm1 for RHF, should * 2 for spin free DM
       
         Parameters
         ----------

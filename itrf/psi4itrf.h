@@ -6,6 +6,7 @@
 extern "C" {
 #endif
 void psi4itrf_init_env(const char *outfile, const char *tmpdir,
+                       unsigned long max_memory,
                        int argc4MPI, char **argv4MPI);
 void psi4itrf_del_env();
 void psio_clean();

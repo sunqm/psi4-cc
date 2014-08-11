@@ -46,6 +46,7 @@ cdef extern from "libchkpt/chkpt.h":
 
 cdef extern from "psi4itrf.h":
     void psi4itrf_init_env(char *outfile, char *tmpdir, 
+                           unsigned long max_memory,
                            int argc4MPI, char **argv4MPI)
     void psi4itrf_del_env()
     void psio_clean()
@@ -62,7 +63,7 @@ cdef extern from "psi4itrf.h":
                         double *rdm2_ab, double *rdm2_ba, int nmo)
  
 
-def set_psi4_env(tmpdir, outfile='stdout', argv=[]):
+def set_psi4_env(tmpdir, outfile='stdout', argv=[], max_memory=(1<<30)):
     '''
     set_psi4_env()
     
@@ -72,7 +73,7 @@ def set_psi4_env(tmpdir, outfile='stdout', argv=[]):
     cdef char **argv_buf = <char **>malloc(argc * sizeof(char *))
     for i, a in enumerate(argv):
         argv_buf[i] = PyString_AsString(a)
-    psi4itrf_init_env(outfile, tmpdir, argc, argv_buf)
+    psi4itrf_init_env(outfile, tmpdir, max_memory, argc, argv_buf)
     free(argv_buf)
 
 def del_psi4_env():

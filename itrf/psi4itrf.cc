@@ -43,6 +43,7 @@ namespace psi {
 using namespace psi;
 
 void psi4itrf_init_env(const char *outfile, const char *tmpdir, 
+                       unsigned long max_memory,
                        int argc4MPI, char **argv4MPI)
 {
     char *fake_argv[] = {NULL};
@@ -55,7 +56,7 @@ void psi4itrf_init_env(const char *outfile, const char *tmpdir,
 #endif
     timer_init();
     Wavefunction::initialize_singletons();
-    Process::environment.set_memory(DEF_MAXMEM);
+    Process::environment.set_memory(max_memory);
 
     assert(psi_start(outfile) != PSI_RETURN_FAILURE);
 
