@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
-import numpy
-
+import numpy as np
 import psi4
 
 import sys
@@ -23,8 +22,7 @@ rhf = scf.RHF(mol)
 print rhf.scf()
 
 L = rhf.mo_coeff.shape[1]
-
-hcore_mo = reduce(numpy.dot, (rhf.mo_coeff.T, rhf.get_hcore(), rhf.mo_coeff))
+hcore_mo = reduce(np.dot, (rhf.mo_coeff.T, rhf.get_hcore(), rhf.mo_coeff))
 eri = ao2mo.outcore.full_iofree(mol, rhf.mo_coeff, compact=False).reshape(L,L,L,L)
 ps = psi4.Solver()
 with psi4.capture_stdout():
@@ -32,11 +30,9 @@ with psi4.capture_stdout():
     ecc = ps.energy('CCSD')
     rdm1, rdm2 = ps.density() #RDM2 in physics notation!
 
-print rdm1.shape
-print rdm2.shape
-
-e1 = numpy.einsum('ij,ij->', rdm1, hcore_mo) * 2
-e2 = numpy.einsum('ijkl,ikjl->', rdm2, eri) * 0.5
+e1 = np.einsum('ij,ij->', rdm1, hcore_mo) * 2
+e2 = np.einsum('ijkl,ikjl->', rdm2, eri) * 0.5
 
 # ecc should be -0.213343234276
 print ecc, e1, e2, e1+e2
+
