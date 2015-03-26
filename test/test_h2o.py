@@ -3,9 +3,10 @@
 import numpy
 
 import psi4
-import gto
-import scf
-import ao2mo
+
+import sys
+sys.path.append('/home/seba') #Folder in which PySCF is installed
+from pyscf import gto, scf, symm, ao2mo
 
 mol = gto.Mole()
 mol.verbose = 5
@@ -21,28 +22,21 @@ mol.build()
 rhf = scf.RHF(mol)
 print rhf.scf()
 
+L = rhf.mo_coeff.shape[1]
+
 hcore_mo = reduce(numpy.dot, (rhf.mo_coeff.T, rhf.get_hcore(), rhf.mo_coeff))
-eri = ao2mo.gen_int2e_ao2mo(mol, rhf.mo_coeff)
+eri = ao2mo.outcore.full_iofree(mol, rhf.mo_coeff, compact=False).reshape(L,L,L,L)
 ps = psi4.Solver()
 with psi4.capture_stdout():
-    ps.prepare('RHF', rhf.mo_coeff, hcore_mo, eri, mol.nelectron)
+    ps.prepare('RHF', rhf.mo_coeff, hcore_mo, ao2mo.restore(4,eri,L), mol.nelectron)
     ecc = ps.energy('CCSD')
-    rdm1, rdm2 = ps.density()
+    rdm1, rdm2 = ps.density() #RDM2 in physics notation!
 
-n = rhf.mo_coeff.shape[1]
-eri_full = numpy.empty((n,n,n,n))
-for i in range(n):
-    for j in range(i+1):
-        ij = i*(i+1)/2 + j
-        for k in range(n):
-            for l in range(k+1):
-                kl = k*(k+1)/2 + l
-                eri_full[i,k,j,l] = eri[ij,kl]
-                eri_full[j,k,i,l] = eri[ij,kl]
-                eri_full[i,l,j,k] = eri[ij,kl]
-                eri_full[j,l,i,k] = eri[ij,kl]
-e1 = numpy.dot(rdm1.flatten(), hcore_mo.flatten()) * 2
-e2 = numpy.dot(rdm2.flatten(), eri_full.flatten()) * .5
+print rdm1.shape
+print rdm2.shape
+
+e1 = numpy.einsum('ij,ij->', rdm1, hcore_mo) * 2
+e2 = numpy.einsum('ijkl,ikjl->', rdm2, eri) * 0.5
 
 # ecc should be -0.213343234276
 print ecc, e1, e2, e1+e2

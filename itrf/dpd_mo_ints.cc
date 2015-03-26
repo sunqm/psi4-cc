@@ -77,7 +77,7 @@ void save_mo_ints_2e(int filenum, const double *eri, int nmo)
                 for(s = 0; s <= r; s++) {
                     rs = LOWERTRI_INDEX(r, s);
                     iwl_buf_wrt_val(&MBuff, p, q, r, s, eri[pq*n_pairs+rs],
-                                    0, outfile, 0);
+                                    0, "outfile", 0);
                 }
             }
         }

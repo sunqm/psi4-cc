@@ -42,7 +42,13 @@
 #include "ccenergy/globals.h"
 //#include "get_moinfo.h"
 
-namespace psi { namespace ccenergy {
+namespace psi {
+
+void reorder_qt_uhf_modified(int *docc, int *socc, int *frozen_docc,
+                    int *frozen_uocc, int *order_alpha, int *order_beta,
+                    int *orbspi, int nirreps);
+
+namespace ccenergy {
 
 template <class T>
 void read_moinfo_from_chkpt(T& moinfo)
@@ -272,7 +278,7 @@ void get_moinfo_light(void)
         moinfo.qt2pitzer_a = init_int_array(moinfo.nmo);
         moinfo.pitzer2qt_b = init_int_array(moinfo.nmo);
         moinfo.qt2pitzer_b = init_int_array(moinfo.nmo);
-        reorder_qt_uhf(moinfo.clsdpi, moinfo.openpi, moinfo.frdocc, moinfo.fruocc,
+        reorder_qt_uhf_modified(moinfo.clsdpi, moinfo.openpi, moinfo.frdocc, moinfo.fruocc,
                        moinfo.pitzer2qt_a, moinfo.pitzer2qt_b, moinfo.orbspi,
                        moinfo.nirreps);
         for(i=0; i < moinfo.nmo; i++) {
@@ -301,9 +307,9 @@ void get_moinfo_light(void)
 //    psio_read_entry(PSIF_CC_INFO, "Reference Energy", (char *) &(moinfo.eref),
 //                    sizeof(double));
 //
-//    fprintf(outfile,"\n\tNuclear Rep. energy (chkpt)   = %20.15f\n",moinfo.enuc);
-//    fprintf(outfile,  "\tSCF energy          (chkpt)   = %20.15f\n",moinfo.escf);
-//    fprintf(outfile,  "\tReference energy    (file100) = %20.15f\n",moinfo.eref);
+//    outfile->Printf("\n\tNuclear Rep. energy (chkpt)   = %20.15f\n",moinfo.enuc);
+//    outfile->Printf(  "\tSCF energy          (chkpt)   = %20.15f\n",moinfo.escf);
+//    outfile->Printf(  "\tReference energy    (file100) = %20.15f\n",moinfo.eref);
 }
 
 /* Frees memory allocated in get_moinfo() and dumps out the energy. */

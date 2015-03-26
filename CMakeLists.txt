@@ -1,14 +1,14 @@
 cmake_minimum_required (VERSION 2.8)
-project (psi4-cc)
+project (psi4cc)
 
-set(PSI4DIR $ENV{HOME}/Software/src/QC/psi4)
-set(PSI4BUILDIR ${PSI4DIR}/obj)
+set(PSI4DIR $ENV{HOME}/psi4public)
+set(PSI4BUILDIR ${PSI4DIR}/objects)
 message("psi4 src dir is  ${PSI4DIR}\n")
 
 #get_filename_component(ROOT_SRC_DIR ${CMAKE_CURRENT_LIST_FILE} PATH)
 #set(CMAKE_MODULE_PATH "${ROOT_SRC_DIR}/cmake/")
 
-set(LAPACK_LIBRARIES "-L${MKL_LIB_PATH} -I${MKLINCLUDE} -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lpthread -lmkl_avx -lm")
+set(LAPACK_LIBRARIES "-L${MKL_LIB_PATH} -I${MKLINCLUDE} -lmkl")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${LAPACK_LIBRARIES}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O3 -fPIC")
 
@@ -51,12 +51,12 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 
 set(PSILIB mints_wrapper dfmp2 dfocc scf psimrcc ccenergy ccsort ccdensity
   transqt2 cctriples scf_solver fock dcft lmp2 mcscf sapt dftsapt
-  sapt_solver cchbar cclambda transqt ccresponse detci occ
+  sapt_solver cchbar cclambda transqt transqt2 ccresponse detci occ
   mrcc fnocc cceom adc thermo functional disp thce 3index deriv_wrapper
   optking findif mints trans dpd chkpt iwl psio qt ciomr options
-  moinfo util stable scfgrad util diis plugin parallel)
-set(ITRFLIB psi4itrfccsort psi4itrfccdensity psi4itrfccenergy
-  psi4itrfcclambda psi4itrfcchbar psi4cctriples)
+  moinfo util stable scfgrad util diis plugin parallel parallel2
+  psi4util PsiUtil efp efp_solver interface_libefp)
+set(ITRFLIB psi4itrfccsort psi4itrfccdensity psi4itrfccenergy psi4itrfcclambda psi4itrfcchbar psi4cctriples psi4qt)
 link_directories(
   ${PSI4BUILDIR}/lib
   ${PROJECT_BINARY_DIR}/lib)
@@ -68,4 +68,5 @@ add_subdirectory(ccsort)
 add_subdirectory(ccdensity)
 add_subdirectory(cctriples)
 add_subdirectory(itrf)
+add_subdirectory(qt)
 

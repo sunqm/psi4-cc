@@ -278,7 +278,7 @@ PsiReturnType ccdensity_light(Options& options)
       add_ref_RHF(&OutBuf);
 
       // ==> One-Electron Properties <== //
-//      fprintf(outfile, "  ==> Properties: Root %d <==\n\n", i);
+//      outfile->Printf( "  ==> Properties: Root %d <==\n\n", i);
 //      dipole();
 
       if(params.onepdm_grid_dump) dx_write(options, moinfo.opdm);
