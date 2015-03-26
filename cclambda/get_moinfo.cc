@@ -196,8 +196,7 @@ void get_moinfo_light(void)
         moinfo.nvirt = 0;
         for(h=0; h < moinfo.nirreps; h++) moinfo.nvirt += moinfo.virtpi[h];
     }
-
-    fflush(outfile);
+    
 }
 
 /* Frees memory allocated in get_moinfo() and dumps some info. */

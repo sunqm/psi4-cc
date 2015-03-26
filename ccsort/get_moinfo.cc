@@ -16,7 +16,13 @@
 #include "ccsort/globals.h"
 //#include "ccenergy/get_moinfo.h"
 
-namespace psi { namespace ccsort {
+namespace psi {
+
+void reorder_qt_uhf_modified(int *docc, int *socc, int *frozen_docc,
+                    int *frozen_uocc, int *order_alpha, int *order_beta,
+                    int *orbspi, int nirreps);
+
+namespace ccsort {
 
 template <class T>
 void read_moinfo_from_chkpt(T& moinfo)
@@ -81,17 +87,17 @@ void get_moinfo_light(void)
 
     /* Calculation consistency check */
     if(moinfo.nfzc && (fabs(moinfo.efzc) < 1e-7)) {
-        fprintf(outfile, "\tCCSORT Error: Orbitals are frozen in input,\n");
-        fprintf(outfile, "\tbut frozen core energy is small!\n");
-        fprintf(outfile, "\tCalculation will be aborted...\n");
-        fflush(outfile);
+        outfile->Printf( "\tCCSORT Error: Orbitals are frozen in input,\n");
+        outfile->Printf( "\tbut frozen core energy is small!\n");
+        outfile->Printf( "\tCalculation will be aborted...\n");
+        
         exit(PSI_RETURN_FAILURE);
     }
     else if(!moinfo.nfzc && fabs(moinfo.efzc)) {
-        fprintf(outfile, "\tCCSORT Warning: No orbitals are frozen,\n");
-        fprintf(outfile, "\tbut the frozen-core energy in chkpt is non-zero.\n");
-        fprintf(outfile, "\tCalculation will continue with zero efzc...\n");
-        fflush(outfile);
+        outfile->Printf( "\tCCSORT Warning: No orbitals are frozen,\n");
+        outfile->Printf( "\tbut the frozen-core energy in chkpt is non-zero.\n");
+        outfile->Printf( "\tCalculation will continue with zero efzc...\n");
+        
         moinfo.efzc = 0.0;
     }
 
@@ -107,7 +113,7 @@ void get_moinfo_light(void)
         moinfo.qt2pitz_A = init_int_array(moinfo.nmo);
         moinfo.pitz2qt_B = init_int_array(moinfo.nmo);
         moinfo.qt2pitz_B = init_int_array(moinfo.nmo);
-        reorder_qt_uhf(moinfo.clsdpi, moinfo.openpi, moinfo.frdocc, moinfo.fruocc,
+        reorder_qt_uhf_modified(moinfo.clsdpi, moinfo.openpi, moinfo.frdocc, moinfo.fruocc,
                        moinfo.pitz2qt_A, moinfo.pitz2qt_B, moinfo.orbspi, moinfo.nirreps);
 
         for(i=0; i < moinfo.nmo; i++) {
@@ -1095,10 +1101,10 @@ void get_moinfo_light(void)
             free_block(evects[h]);
 
             /*
-      fprintf(outfile, "\n\tOriginal SCF Eigenvectors:\n");
+      outfile->Printf( "\n\tOriginal SCF Eigenvectors:\n");
       print_mat(evects[h], moinfo.sopi[h], moinfo.orbspi[h], outfile);
 
-      fprintf(outfile, "\n\tRe-ordered Virtual SCF Eigenvectors:\n");
+      outfile->Printf( "\n\tRe-ordered Virtual SCF Eigenvectors:\n");
       print_mat(scf_vector[h], moinfo.sopi[h], moinfo.virtpi[h], outfile);
     */
         }

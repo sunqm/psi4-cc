@@ -17,6 +17,7 @@
 #include <psiconfig.h>
 #include <libplugin/plugin.h>
 #include <libparallel/parallel.h>
+#include <libparallel/ParallelPrinter.h>
 
 using namespace std;
 
@@ -33,13 +34,10 @@ int psi_start(const char *file6)
     Process::environment.set_n_threads(1);
     messy = true;
 
-    if(ofname == "stdout") {
-        outfile = stdout;
+    if(ofname == "stdout"){
+        outfile = boost::shared_ptr<PsiOutStream>(new PsiOutStream());
     } else {
-        if (NULL == (outfile = fopen(ofname.c_str(), "w"))) {
-            fprintf(stderr, "Error: could not open output file %s\n",ofname.c_str());
-            return(PSI_RETURN_FAILURE);
-        }
+        outfile = boost::shared_ptr<PsiOutStream>(new OutFile(ofname,TRUNCATE));
     }
 
     /* copy over file prefix, etc. into their appropriate variables */

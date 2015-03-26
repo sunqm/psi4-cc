@@ -38,7 +38,7 @@ void cachedone_rhf(int **cachelist);
 void sort_amps(void);
 void tau_build(void);
 void taut_build(void);
-void status(const char *, FILE *);
+void status(const char *, std::string );
 void cc3_HET1(void);
 void Fai_build(void);
 void reference(void);
@@ -95,30 +95,30 @@ PsiReturnType cchbar_light(Options &options)
   }
 
   F_build();
-  if(params.print & 2) status("F elements", outfile);
+  if(params.print & 2) status("F elements", "outfile");
 
   Wamef_build();
-  if(params.print & 2) status("Wamef elements", outfile);
+  if(params.print & 2) status("Wamef elements", "outfile");
   Wmnie_build();
-  if(params.print & 2) status("Wmnie elements", outfile);
+  if(params.print & 2) status("Wmnie elements", "outfile");
 
   if(params.wfn == "CC2" || params.wfn == "EOM_CC2") {
     cc2_Wmbej_build();
-    if(params.print & 2) status("Wmbej elements", outfile);
+    if(params.print & 2) status("Wmbej elements", "outfile");
     cc2_Zmbej_build();
-    if(params.print & 2) status("Zmbej elements", outfile);
+    if(params.print & 2) status("Zmbej elements", "outfile");
     cc2_Wmbij_build();
-    if(params.print & 2) status("Wmbij elements", outfile);
+    if(params.print & 2) status("Wmbij elements", "outfile");
     cc2_Wabei_build();
-    if(params.print & 2) status("Wabei elements", outfile);
+    if(params.print & 2) status("Wabei elements", "outfile");
   }
   else {
     Wabei_build();
-    if(params.print & 2) status("Wabei elements", outfile);
+    if(params.print & 2) status("Wabei elements", "outfile");
     Wmbej_build();
-    if(params.print & 2) status("Wmbej elements", outfile);
+    if(params.print & 2) status("Wmbej elements", "outfile");
     Wmbij_build();
-    if(params.print & 2) status("Wmbij elements", outfile);
+    if(params.print & 2) status("Wmbij elements", "outfile");
 
     if( params.wfn == "CC3" || params.wfn == "EOM_CC3" ) {
       /* switch to ROHF to generate all spin cases of He^T1 elements */

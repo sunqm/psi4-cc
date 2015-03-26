@@ -52,7 +52,7 @@ void c_clean(dpdfile2 *LIA, dpdfile2 *Lia, dpdbuf4 *LIJAB, dpdbuf4 *Lijab, dpdbu
 void L_clean(struct L_Params pL_params);
 void zeta_norm(struct L_Params pL_params);
 void spinad_amps(void);
-void status(const char *, FILE *);
+void status(const char *, std::string );
 void hbar_extra(void);
 void ortho_Rs(struct L_Params *pL_params, int current_L);
 
@@ -89,7 +89,7 @@ PsiReturnType cclambda_light(Options& options)
      ground state. Keeping the files around should allow us to
      restart from old Lambda amplitudes. -TDC, 11/2007 */
   if(!(params.dertype==1 && !cc_excited(params.wfn))) {
-    fprintf(outfile, "\tDeleting old CC_LAMBDA data.\n");
+    outfile->Printf( "\tDeleting old CC_LAMBDA data.\n");
     psio_close(PSIF_CC_LAMBDA,0);
     psio_open(PSIF_CC_LAMBDA,PSIO_OPEN_NEW);
     psio_close(PSIF_CC_DENOM,0);
@@ -177,18 +177,18 @@ PsiReturnType cclambda_light(Options& options)
       psio_open(PSIF_CC_DENOM,PSIO_OPEN_NEW);
     }
 
-    fprintf(outfile,"\tSymmetry of left-hand state: %s\n",
+    outfile->Printf("\tSymmetry of left-hand state: %s\n",
             moinfo.labels[ moinfo.sym^(pL_params[i].irrep) ]);
-    fprintf(outfile,"\tSymmetry of left-hand eigenvector: %s\n",
+    outfile->Printf("\tSymmetry of left-hand eigenvector: %s\n",
             moinfo.labels[(pL_params[i].irrep)]);
 
     denom(pL_params[i]); /* uses L_params.cceom_energy for excited states */
     init_amps(pL_params[i]); /* uses denominators for initial zeta guess */
 
-    fprintf(outfile, "\n\t          Solving Lambda Equations\n");
-    fprintf(outfile, "\t          ------------------------\n");
-    fprintf(outfile, "\tIter     PseudoEnergy or Norm         RMS  \n");
-    fprintf(outfile, "\t----     ---------------------     --------\n");
+    outfile->Printf( "\n\t          Solving Lambda Equations\n");
+    outfile->Printf( "\t          ------------------------\n");
+    outfile->Printf( "\tIter     PseudoEnergy or Norm         RMS  \n");
+    outfile->Printf( "\t----     ---------------------     --------\n");
 
     moinfo.lcc = pseudoenergy(pL_params[i]);
     update();
@@ -205,14 +205,14 @@ PsiReturnType cclambda_light(Options& options)
 
     cc2_Gai_build(pL_params[i].irrep);
     cc2_L1_build(pL_params[i]);
-    if(params.print & 2) status("L1 amplitudes", outfile);
+    if(params.print & 2) status("L1 amplitudes", "outfile");
     cc2_L2_build(pL_params[i]);
 
       }
       else {
     G_build(pL_params[i].irrep);
     L1_build(pL_params[i]);
-    if(params.print & 2) status("L1 amplitudes", outfile);
+    if(params.print & 2) status("L1 amplitudes", "outfile");
     L2_build(pL_params[i]);
 
     if(params.wfn == "CC3") {
@@ -235,8 +235,8 @@ PsiReturnType cclambda_light(Options& options)
         Lsave_index(pL_params[i]); /* save Ls with indices in LAMPS */
         Lamp_write(pL_params[i]); /* write out largest  Ls */
     /* sort_amps(); to be done by later functions */
-        fprintf(outfile, "\n\tIterations converged.\n");
-        fflush(outfile);
+        outfile->Printf( "\n\tIterations converged.\n");
+        
         moinfo.iter = 0;
         break;
       }
@@ -246,11 +246,11 @@ PsiReturnType cclambda_light(Options& options)
       moinfo.lcc = pseudoenergy(pL_params[i]);
       update();
     }
-    fprintf(outfile, "\n");
+    outfile->Printf( "\n");
     if(!done) {
-      fprintf(outfile, "\t ** Lambda not converged to %2.1e ** \n",
+      outfile->Printf( "\t ** Lambda not converged to %2.1e ** \n",
           params.convergence);
-      fflush(outfile);
+      
       dpd_close(0);
       cleanup_light();
       exit_io();

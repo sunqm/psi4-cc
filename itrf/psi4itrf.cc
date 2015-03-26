@@ -14,6 +14,7 @@
 #include <psi4/psi4.h>
 #include <psi4-def.h>
 #include <libparallel/parallel.h>
+#include <libparallel2/Communicator.h>
 #include <libqt/qt.h> // for timer
 #include <libmints/wavefunction.h>
 #include <libchkpt/chkpt.h>
@@ -29,7 +30,7 @@
 
 namespace psi {
     extern int psi_start(const char *outfile);
-    extern int psi_stop(FILE* infile, FILE* outfile, char* psi_file_prefix);
+    extern int psi_stop(FILE* infile, std::string OutFileRMR, char* psi_file_prefix);
     extern int read_options(const std::string &name, Options & options, bool suppress_printing);
 
     namespace ccenergy { PsiReturnType ccenergy_light(Options &options); }
@@ -50,9 +51,9 @@ void psi4itrf_init_env(const char *outfile, const char *tmpdir,
     Process::arguments.initialize(0, fake_argv);
     //Process::environment.initialize();
 #if defined HAVE_MPI
-    WorldComm = initialize_communicator(argc4MPI, argv4MPI);
+    WorldComm = boost::shared_ptr<LibParallel::ParallelEnvironment>(new LibParallel::ParallelEnvironment(argc4MPI, argv4MPI));
 #else
-    WorldComm = initialize_communicator(0, fake_argv);
+    WorldComm = boost::shared_ptr<LibParallel::ParallelEnvironment>(new LibParallel::ParallelEnvironment(0, fake_argv));
 #endif
     timer_init();
     Wavefunction::initialize_singletons();
@@ -75,7 +76,7 @@ void psi4itrf_del_env()
     timer_done();
 
     PSIOManager::shared_object()->psiclean();
-    psi_stop(infile, outfile, psi_file_prefix);
+    psi_stop(infile, "outfile", psi_file_prefix);
 
 #if defined HAVE_MPI
     WorldComm->sync();

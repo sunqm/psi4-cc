@@ -63,7 +63,7 @@ void cachedone_rhf(int **cachelist);
 void cachedone_uhf(int **cachelist);
 struct dpd_file4_cache_entry *priority_list(void);
 void spinad_amps(void);
-void status(const char *, FILE *);
+void status(const char *, std::string );
 void lmp2(void);
 void amp_write(void);
 int rotate(void);
@@ -210,10 +210,10 @@ PsiReturnType ccenergy_light(Options &options)
 
     tau_build();
     taut_build();
-    fprintf(outfile, "\t            Solving CC Amplitude Equations\n");
-    fprintf(outfile, "\t            ------------------------------\n");
-    fprintf(outfile, "  Iter             Energy              RMS        T1Diag      D1Diag    New D1Diag    D2Diag\n");
-    fprintf(outfile, "  ----     ---------------------    ---------   ----------  ----------  ----------   --------\n");
+    outfile->Printf( "\t            Solving CC Amplitude Equations\n");
+    outfile->Printf( "\t            ------------------------------\n");
+    outfile->Printf( "  Iter             Energy              RMS        T1Diag      D1Diag    New D1Diag    D2Diag\n");
+    outfile->Printf( "  ----     ---------------------    ---------   ----------  ----------  ----------   --------\n");
     moinfo.ecc = energy(); // fixme
     pair_energies(&emp2_aa, &emp2_ab);
     double last_energy;
@@ -221,7 +221,7 @@ PsiReturnType ccenergy_light(Options &options)
     moinfo.t1diag = diagnostic();
     moinfo.d1diag = d1diag();
     moinfo.new_d1diag = new_d1diag();
-    fflush(outfile);
+    
     moinfo.d2diag = d2diag();
     update();
     checkpoint();
@@ -229,39 +229,39 @@ PsiReturnType ccenergy_light(Options &options)
 
         sort_amps();
         Fme_build(); Fae_build(); Fmi_build();
-        if(params.print & 2) status("F intermediates", outfile);
+        if(params.print & 2) status("F intermediates", "outfile");
 
         t1_build();
-        if(params.print & 2) status("T1 amplitudes", outfile);
+        if(params.print & 2) status("T1 amplitudes", "outfile");
 
         if( params.wfn == "CC2"  || params.wfn == "EOM_CC2" ) {
 
             cc2_Wmnij_build();
-            if(params.print & 2) status("Wmnij", outfile);
+            if(params.print & 2) status("Wmnij", "outfile");
 
             cc2_Wmbij_build();
-            if(params.print & 2) status("Wmbij", outfile);
+            if(params.print & 2) status("Wmbij", "outfile");
 
             cc2_Wabei_build();
-            if(params.print & 2) status("Wabei", outfile);
+            if(params.print & 2) status("Wabei", "outfile");
 
             cc2_t2_build();
-            if(params.print & 2) status("T2 amplitudes", outfile);
+            if(params.print & 2) status("T2 amplitudes", "outfile");
 
         }
 
         else {
 
             Wmbej_build();
-            if(params.print & 2) status("Wmbej", outfile);
+            if(params.print & 2) status("Wmbej", "outfile");
 
             Z_build();
-            if(params.print & 2) status("Z", outfile);
+            if(params.print & 2) status("Z", "outfile");
             Wmnij_build();
-            if(params.print & 2) status("Wmnij", outfile);
+            if(params.print & 2) status("Wmnij", "outfile");
 
             t2_build();
-            if(params.print & 2) status("T2 amplitudes", outfile);
+            if(params.print & 2) status("T2 amplitudes", "outfile");
 
             if( params.wfn == "CC3" || params.wfn == "EOM_CC3" ) {
 
@@ -293,9 +293,9 @@ PsiReturnType ccenergy_light(Options &options)
             moinfo.d2diag = d2diag();
             sort_amps();
             update();
-            fprintf(outfile, "\n\tIterations converged.\n");
-            fflush(outfile);
-            fprintf(outfile, "\n");
+            outfile->Printf( "\n\tIterations converged.\n");
+            
+            outfile->Printf( "\n");
             amp_write();
             if (params.analyze != 0) analyze();
             break;
@@ -314,9 +314,9 @@ PsiReturnType ccenergy_light(Options &options)
     }  // end loop over iterations
 
     if(!done) {
-        fprintf(outfile, "\t ** Wave function not converged to %2.1e ** \n",
+        outfile->Printf( "\t ** Wave function not converged to %2.1e ** \n",
                 params.convergence);
-        fflush(outfile);
+        
         if( params.aobasis != "NONE" ) dpd_close(1);
         dpd_close(0);
         cleanup_light();
