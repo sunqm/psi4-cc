@@ -68,7 +68,7 @@ print 'restrict CCSD PASS'
 
 with psi4.capture_stdout():
     ps.prepare('RHF', c, h1e, eri, m*2, 0)
-    ecc = ps.energy('CCSD(T)')
+    ecc = ps.energy('CCSD')
     rdm1, rdm2 = ps.density()
 
 e1 = numpy.dot(rdm1.flatten(), h1e.flatten()) * 2
@@ -98,7 +98,7 @@ assert(abs(-0.006798942593477-eijab) < 1e-10)
 assert(abs( 0.000499123140399-eibja) < 1e-10)
 assert(abs(-0.000074579201724-eciab) < 1e-10)
 assert(abs( 0.000078881603460-eabcd) < 1e-10)
-print 'restrict CCSD(T) PASS'
+print 'restrict CCSD PASS'
 
 ########################################
 e = fock.diagonal()
