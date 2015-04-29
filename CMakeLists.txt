@@ -32,10 +32,13 @@ execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import numpy; print numpy.get_i
   OUTPUT_VARIABLE NUMPY_INCLUDE)
 include_directories(${PYTHON_INCLUDE_DIRS} ${NUMPY_INCLUDE})
 
+set(CMAKE_LIBRARY_PATH=${CMAKE_LIBRARY_PATH}:${PSI4BUILDIR}/boost/lib)
+set(CMAKE_INCLUDE_PATH=${CMAKE_INCLUDE_PATH}:${PSI4BUILDIR}/boost/include)
+
 set(Boost_USE_STATIC_LIBS off)
 set(Boost_USE_MULTITHREADED off)
 set(Boost_COMPONENTS filesystem python regex serialization system thread)
-find_package(Boost 1.47.0 COMPONENTS ${Boost_COMPONENTS})
+find_package(Boost 1.47.0 COMPONENTS ${Boost_COMPONENTS} REQUIRED)
 #target_link_libraries(${Boost_LIBRARY_DIRS})
 include_directories(${Boost_INCLUDE_DIRS})
 
