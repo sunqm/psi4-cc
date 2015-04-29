@@ -32,8 +32,8 @@ execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import numpy; print numpy.get_i
   OUTPUT_VARIABLE NUMPY_INCLUDE)
 include_directories(${PYTHON_INCLUDE_DIRS} ${NUMPY_INCLUDE})
 
-set(CMAKE_LIBRARY_PATH=${CMAKE_LIBRARY_PATH}:${PSI4BUILDIR}/boost/lib)
-set(CMAKE_INCLUDE_PATH=${CMAKE_INCLUDE_PATH}:${PSI4BUILDIR}/boost/include)
+set(CMAKE_INCLUDE_PATH "${PSI4BUILDIR}/boost/include")
+set(CMAKE_LIBRARY_PATH "${PSI4BUILDIR}/boost/lib")
 
 set(Boost_USE_STATIC_LIBS off)
 set(Boost_USE_MULTITHREADED off)
