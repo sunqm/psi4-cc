@@ -73,9 +73,6 @@ class Solver(object):
         ps.prepare(mo_coeff, fock_on_mo, hcore_on_mo, eri_on_mo, nelec)
         ecc = ps.energy('CCSD')
         rdm1, rdm2 = ps.density()
-
-        eccsdt = ps.energy('CCSD(T)')
-        rdm1, rdm2 = ps.density()
     '''
 
     instances = 0
@@ -167,10 +164,10 @@ class Solver(object):
 
         Parameters
         ----------
-        key : {'CCSD', 'CCSD(T)'}
+        key : {'CCSD'}
             CC solver
         '''
-        assert(key.upper() in ('CCSD', 'CCSD(T)'))
+        assert ( key.upper() == 'CCSD' )
         return _psi4.energy(key.upper(), self.ref)
 
     def density(self, notation='D'):

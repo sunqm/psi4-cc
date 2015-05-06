@@ -25,13 +25,15 @@ Qiming's version works for [psi4public](https://github.com/psi4/psi4public)
 commit a6a30638bb19448528ff016f6ff37960560d8402 (April 6, 2014).
 
 This repository is intended to keep psi4cc working for later versions as well.
-I have tested it on commit 2c73a1f3751103fe2b7abc2b756d11f2d6556207
-(March 24, 2015).
+I have tested it on commit 93a5e8d84afd652e6226b966a114479f5ca1a459
+(March 26, 2015).
 
 Installation
 ------------
 
-### 1. Get psi4 (commit 2c73a1f3751103fe2b7abc2b756d11f2d6556207 or later)
+### 1. Get psi4
+
+Please use commit 93a5e8d84afd652e6226b966a114479f5ca1a459 or later.
 
     > git clone 'https://github.com/psi4/psi4public.git'
     > cd psi4public

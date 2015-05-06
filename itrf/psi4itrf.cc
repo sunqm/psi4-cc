@@ -132,6 +132,7 @@ double psi4ccsd_energy(char *ref_wfn)
     // 4 ~ cache everything. decrease me if catch memeory problems
     Process::environment.options.set_int("CCENERGY", "CACHELEVEL", CACHELEVEL);
     Process::environment.options.set_bool("CCENERGY", "LOCAL", false);  // local-CC
+    Process::environment.options.set_int("CCENERGY", "MAXITER", 150);
 
     PsiReturnType ccsd_return = ccenergy::ccenergy_light(Process::environment.options);
     //if (ccsd_return == Success) {
@@ -162,6 +163,7 @@ void psi4cc_density()
     Process::environment.options.set_int("CCLAMBDA", "PRINT", 0);
     Process::environment.options.set_str("CCLAMBDA", "WFN", ccname);
     Process::environment.options.set_str("CCLAMBDA", "AO_BASIS", "NONE");
+    Process::environment.options.set_int("CCLAMBDA", "MAXITER", 150);
     cclambda::cclambda_light(Process::environment.options);
 
     Process::environment.options.set_current_module("CCDENSITY");
