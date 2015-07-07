@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 2.8)
 project (psi4cc)
 
-set(PSI4DIR $ENV{HOME}/psi4public)
+set(PSI4DIR $ENV{HOME}/hackathon/psi4public)
 set(PSI4BUILDIR ${PSI4DIR}/objects)
 message("psi4 src dir is  ${PSI4DIR}\n")
 
@@ -53,7 +53,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 
 set(PSILIB mints_wrapper dfmp2 dfocc scf psimrcc ccenergy ccsort ccdensity
-  transqt2 cctriples scf_solver fock dcft lmp2 mcscf sapt dftsapt
+  transqt2 cctriples scf_solver fock dcft lmp2 mcscf sapt sapt
   sapt_solver cchbar cclambda transqt transqt2 ccresponse detci occ
   mrcc fnocc cceom adc thermo functional disp thce 3index deriv_wrapper
   optking findif mints trans dpd chkpt iwl psio qt ciomr options
